@@ -3,9 +3,9 @@ const Transaction = require("./Transaction");
 
 const hexaCoin = new Blockchain();
 
-hexaCoin.createTransaction(new Transaction("address1", "address2", 30.50));
-hexaCoin.createTransaction(new Transaction("address1", "address2", 299.00));
-hexaCoin.createTransaction(new Transaction("address2", "address1", 23.50));
+hexaCoin.createTransaction(new Transaction("ADDRESS_01", "ADDRESS_02", 30.50));
+hexaCoin.createTransaction(new Transaction("ADDRESS_01", "ADDRESS_02", 299.00));
+hexaCoin.createTransaction(new Transaction("ADDRESS_02", "ADDRESS_01", 23.50));
 
 console.log("\n<HexaTown>")
 hexaCoin.minePendingTransactions("HexaTown")
