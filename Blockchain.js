@@ -10,7 +10,7 @@ class Blockchain {
   }
 
   createGenesisBlock() {
-    const block = new Block("Genesis block");
+    const block = new Block([]);
     block.mineBlock(this.difficulty);
     return block;
   }
@@ -23,6 +23,7 @@ class Blockchain {
     let block = new Block(this.pendingTransactions, Date.now())
     block.mineBlock(this.difficulty);
     this.chain.push(block);
+    // console.log({chain: this.chain})
     this.pendingTransactions = [
       new Transaction(null, miningRewardAddress, this.miningReward)
     ];
@@ -34,18 +35,18 @@ class Blockchain {
 
   getBalanceOfAddress(address) {
     let balance = 0;
-    for (const block in this.chain){
-      console.log('block:', block.transactions ? block.transactions.length : '-')
-      for(const trans in block.transactions) {
-        console.log(trans)
-          if(trans.fromAddress === address) {
-            balance -= trans.amount;
-          }
-          if(trans.toAddress === address) {
-            balance += trans.amount;
-          }
-      }
-    }
+    this.chain.forEach(block => {
+      // console.log({transactions: block.transactions})
+      block.transactions.forEach(trans => {
+        // console.log({trans})
+        if(trans.fromAddress === address) {
+          balance -= trans.amount;
+        }
+        if(trans.toAddress === address) {
+          balance += trans.amount;
+        }
+      });
+    });
     return balance;
   }
 
@@ -54,7 +55,7 @@ class Blockchain {
     for (let i = 1; i < this.chain.length; i++) {
       const currentBlock = this.chain[i];
       const previousBlock = this.chain[i - 1];
-      console.log({ previousBlock, currentBlock });
+      // console.log({ previousBlock, currentBlock });
       if (currentBlock.hash !== currentBlock.calculateHash()) {
         console.log("false | data changed | ", currentBlock.hash);
         return false;
