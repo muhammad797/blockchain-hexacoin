@@ -1,16 +1,22 @@
-const Block = require("./Block");
 const Blockchain = require("./Blockchain");
+const Transaction = require("./Transaction");
 
 const hexaCoin = new Blockchain();
-hexaCoin.addBlock(new Block({ amount: 5.99 }), Date.now());
-hexaCoin.addBlock(new Block({ amount: 38.3 }), Date.now());
-hexaCoin.addBlock(new Block({ amount: 3.53 }), Date.now());
 
-console.log("\n----- ORIGINAL BLOCKCHAIN ------\n");
-console.log(JSON.stringify(hexaCoin, null, 4));
+hexaCoin.createTransaction(new Transaction("address1", "address2", 30.50));
+hexaCoin.createTransaction(new Transaction("address1", "address2", 299.00));
+hexaCoin.createTransaction(new Transaction("address2", "address1", 23.50));
 
-console.log("\n----- MAKING CHANGES ------\n");
-hexaCoin.chain[1].data = { amount: 100 };
-hexaCoin.chain[1].hash = hexaCoin.chain[1].calculateHash();
+console.log("👷 <HexaTown>")
+hexaCoin.minePendingTransactions("HexaTown")
+console.log("balance of HexaTown is", hexaCoin.getBalanceOfAddress("HexaTown"))
 
-console.log("\n----- Is Chain Valid?", hexaCoin.isChainValid(), "-----\n");
+hexaCoin.createTransaction(new Transaction("address2", "address1", 49.50));
+
+console.log("👷 <LogicBulb>")
+hexaCoin.minePendingTransactions("LogicBulb")
+console.log("balance of HexaTown is", hexaCoin.getBalanceOfAddress("HexaTown"))
+
+console.log("👷 <LogicBulb>")
+hexaCoin.minePendingTransactions("LogicBulb")
+console.log("balance of LogicBulb is", hexaCoin.getBalanceOfAddress("LogicBulb"))

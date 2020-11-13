@@ -1,9 +1,12 @@
 const Block = require("./Block");
+const Transaction = require("./Transaction");
 
 class Blockchain {
   constructor() {
-    this.difficulty = 3;
+    this.difficulty = 2;
     this.chain = [this.createGenesisBlock()];
+    this.pendingTransactions = [];
+    this.miningReward = 100;
   }
 
   createGenesisBlock() {
@@ -16,10 +19,34 @@ class Blockchain {
     return this.chain[this.chain.length - 1];
   }
 
-  addBlock(block) {
-    block.previousHash = this.getLatestBlock().hash;
+  minePendingTransactions(miningRewardAddress) {
+    let block = new Block(this.pendingTransactions, Date.now())
     block.mineBlock(this.difficulty);
     this.chain.push(block);
+    this.pendingTransactions = [
+      new Transaction(null, miningRewardAddress, this.miningReward)
+    ];
+  }
+
+  createTransaction(transaction) {
+    this.pendingTransactions.push(transaction);
+  }
+
+  getBalanceOfAddress(address) {
+    let balance = 0;
+    for (const block in this.chain){
+      console.log('block:', block.transactions ? block.transactions.length : '-')
+      for(const trans in block.transactions) {
+        console.log(trans)
+          if(trans.fromAddress === address) {
+            balance -= trans.amount;
+          }
+          if(trans.toAddress === address) {
+            balance += trans.amount;
+          }
+      }
+    }
+    return balance;
   }
 
   isChainValid() {
